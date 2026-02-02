@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: poker-frontend-config
+  namespace: poker-calculator
+data:
+  config.js: |
+    // Runtime configuration for API URL
+    // This file is injected via ConfigMap
+    window.POKER_API_URL = 'http://poker-calculator-backend:8080';

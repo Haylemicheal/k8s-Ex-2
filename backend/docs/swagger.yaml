@@ -1,0 +1,104 @@
+basePath: /
+definitions:
+  main.ConversionRequest:
+    description: Request body for temperature conversion
+    properties:
+      celsius:
+        description: Temperature in Celsius
+        example: 25
+        type: number
+    type: object
+  main.ConversionResponse:
+    description: Response containing both Celsius and Fahrenheit temperatures
+    properties:
+      celsius:
+        description: Temperature in Celsius
+        example: 25
+        type: number
+      fahrenheit:
+        description: Temperature in Fahrenheit
+        example: 77
+        type: number
+    type: object
+  main.FahrenheitConversionRequest:
+    description: Request body for Fahrenheit to Celsius conversion
+    properties:
+      fahrenheit:
+        description: Temperature in Fahrenheit
+        example: 77
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: Response containing both Celsius and Fahrenheit temperatures
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Temperature Converter API
+  version: "1.0"
+paths:
+  /convert:
+    post:
+      consumes:
+      - application/json
+      description: Converts a temperature from Celsius to Fahrenheit
+      parameters:
+      - description: Temperature in Celsius
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.ConversionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful conversion
+          schema:
+            $ref: '#/definitions/main.ConversionResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "405":
+          description: Method not allowed
+          schema:
+            type: string
+      summary: Convert Celsius to Fahrenheit
+      tags:
+      - conversion
+  /convert-fahrenheit:
+    post:
+      consumes:
+      - application/json
+      description: Converts a temperature from Fahrenheit to Celsius
+      parameters:
+      - description: Temperature in Fahrenheit
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.FahrenheitConversionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful conversion
+          schema:
+            $ref: '#/definitions/main.ConversionResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "405":
+          description: Method not allowed
+          schema:
+            type: string
+      summary: Convert Fahrenheit to Celsius
+      tags:
+      - conversion
+swagger: "2.0"

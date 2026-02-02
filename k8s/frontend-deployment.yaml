@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temperature-converter-frontend
+  labels:
+    app: temperature-converter-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: temperature-converter-frontend
+  template:
+    metadata:
+      labels:
+        app: temperature-converter-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: gcr.io/tempcalc/temperature-converter-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: API_URL
+          value: "http://temperature-converter-backend:8080"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"

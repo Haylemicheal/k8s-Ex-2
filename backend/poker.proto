@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package poker;
+
+option go_package = "./pb";
+
+// PokerEvaluator service for Texas Hold'em poker hand evaluation and probability calculation
+service PokerEvaluator {
+  // EvaluateHand evaluates the best hand from 2 hole cards + 5 community cards
+  rpc EvaluateHand(EvaluateHandRequest) returns (EvaluateHandResponse);
+  
+  // CompareHands compares two hands (each with 2 hole cards + 5 community cards) and determines the winner
+  rpc CompareHands(CompareHandsRequest) returns (CompareHandsResponse);
+  
+  // CalculateWinProbability calculates the probability of winning using Monte Carlo simulation
+  rpc CalculateWinProbability(ProbabilityRequest) returns (ProbabilityResponse);
+}
+
+// Request to evaluate a single hand
+message EvaluateHandRequest {
+  repeated string hole_cards = 1;  // 2 cards (e.g., ["HA", "S7"])
+  repeated string community_cards = 2;  // 5 cards (e.g., ["CT", "DK", "H5", "S2", "C9"])
+}
+
+// Response with hand evaluation
+message EvaluateHandResponse {
+  string best_hand = 1;  // Hand type (e.g., "Three of a Kind", "Flush", "Royal Flush")
+  int32 hand_value = 2;  // Numeric value for comparison (higher is better)
+  repeated string best_five_cards = 3;  // The 5 cards that make the best hand
+}
+
+// Request to compare two hands
+message CompareHandsRequest {
+  repeated string player1_hole_cards = 1;  // Player 1's 2 hole cards
+  repeated string player1_community_cards = 2;  // 5 community cards
+  repeated string player2_hole_cards = 3;  // Player 2's 2 hole cards
+  repeated string player2_community_cards = 4;  // 5 community cards
+}
+
+// Response with comparison results
+message CompareHandsResponse {
+  EvaluateHandResponse player1_hand = 1;
+  EvaluateHandResponse player2_hand = 2;
+  int32 winner = 3;  // 1 for player1, 2 for player2, 0 for tie
+}
+
+// Request for probability calculation
+message ProbabilityRequest {
+  repeated string hole_cards = 1;  // 2 hole cards
+  repeated string community_cards = 2;  // 0, 3, 4, or 5 community cards
+  int32 num_players = 3;  // Number of players (including the one with hole_cards)
+  int32 num_simulations = 4;  // Number of Monte Carlo simulations
+}
+
+// Response with probability
+message ProbabilityResponse {
+  double win_probability = 1;  // Probability of winning (0.0 to 1.0)
+  double tie_probability = 2;  // Probability of tying (0.0 to 1.0)
+}
+
+
+
+
+
+
+

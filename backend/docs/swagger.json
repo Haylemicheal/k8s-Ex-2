@@ -1,0 +1,153 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Response containing both Celsius and Fahrenheit temperatures",
+        "title": "Temperature Converter API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/convert": {
+            "post": {
+                "description": "Converts a temperature from Celsius to Fahrenheit",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "conversion"
+                ],
+                "summary": "Convert Celsius to Fahrenheit",
+                "parameters": [
+                    {
+                        "description": "Temperature in Celsius",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.ConversionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful conversion",
+                        "schema": {
+                            "$ref": "#/definitions/main.ConversionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/convert-fahrenheit": {
+            "post": {
+                "description": "Converts a temperature from Fahrenheit to Celsius",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "conversion"
+                ],
+                "summary": "Convert Fahrenheit to Celsius",
+                "parameters": [
+                    {
+                        "description": "Temperature in Fahrenheit",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.FahrenheitConversionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful conversion",
+                        "schema": {
+                            "$ref": "#/definitions/main.ConversionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.ConversionRequest": {
+            "description": "Request body for temperature conversion",
+            "type": "object",
+            "properties": {
+                "celsius": {
+                    "description": "Temperature in Celsius",
+                    "type": "number",
+                    "example": 25
+                }
+            }
+        },
+        "main.ConversionResponse": {
+            "description": "Response containing both Celsius and Fahrenheit temperatures",
+            "type": "object",
+            "properties": {
+                "celsius": {
+                    "description": "Temperature in Celsius",
+                    "type": "number",
+                    "example": 25
+                },
+                "fahrenheit": {
+                    "description": "Temperature in Fahrenheit",
+                    "type": "number",
+                    "example": 77
+                }
+            }
+        },
+        "main.FahrenheitConversionRequest": {
+            "description": "Request body for Fahrenheit to Celsius conversion",
+            "type": "object",
+            "properties": {
+                "fahrenheit": {
+                    "description": "Temperature in Fahrenheit",
+                    "type": "number",
+                    "example": 77
+                }
+            }
+        }
+    }
+}

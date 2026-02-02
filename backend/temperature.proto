@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package temperature;
+
+option go_package = "./pb";
+
+// TemperatureConverter service for converting between Celsius and Fahrenheit
+service TemperatureConverter {
+  // ConvertCelsiusToFahrenheit converts Celsius to Fahrenheit
+  rpc ConvertCelsiusToFahrenheit(CelsiusRequest) returns (TemperatureResponse);
+  
+  // ConvertFahrenheitToCelsius converts Fahrenheit to Celsius
+  rpc ConvertFahrenheitToCelsius(FahrenheitRequest) returns (TemperatureResponse);
+}
+
+// Request with Celsius temperature
+message CelsiusRequest {
+  double celsius = 1;
+}
+
+// Request with Fahrenheit temperature
+message FahrenheitRequest {
+  double fahrenheit = 1;
+}
+
+// Response with both Celsius and Fahrenheit temperatures
+message TemperatureResponse {
+  double celsius = 1;
+  double fahrenheit = 2;
+}
+
