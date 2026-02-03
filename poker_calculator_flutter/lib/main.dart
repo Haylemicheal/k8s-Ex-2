@@ -152,6 +152,34 @@ class _EvaluateHandTabState extends State<EvaluateHandTab> {
         return;
       }
 
+      // Validate card format (2 characters: suit + rank)
+      final allCards = [...holeCards, ...communityCards];
+      for (final card in allCards) {
+        if (card.length != 2) {
+          setState(() {
+            _error = 'Invalid card format: $card. Use format like HA, SK, D7, CT';
+            _isLoading = false;
+          });
+          return;
+        }
+        final suit = card[0];
+        final rank = card[1];
+        if (!['H', 'S', 'D', 'C'].contains(suit)) {
+          setState(() {
+            _error = 'Invalid suit in $card. Use H, S, D, or C';
+            _isLoading = false;
+          });
+          return;
+        }
+        if (!['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'].contains(rank)) {
+          setState(() {
+            _error = 'Invalid rank in $card. Use A, K, Q, J, T, 9-2';
+            _isLoading = false;
+          });
+          return;
+        }
+      }
+
       final url = Uri.parse('${widget.apiUrl}/poker/evaluate-hand');
       final body = jsonEncode({
         'hole_cards': holeCards,
@@ -211,6 +239,11 @@ class _EvaluateHandTabState extends State<EvaluateHandTab> {
           const Text(
             'Card format: HA (Heart-Ace), S7 (Spade-7), CT (Club-Ten), etc.',
             style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Suits: H=Hearts, S=Spades, D=Diamonds, C=Clubs | Ranks: A, K, Q, J, T, 9-2',
+            style: TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic),
           ),
           const SizedBox(height: 16),
           const Text('Hole Cards:', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -421,6 +454,34 @@ class _CompareHandsTabState extends State<CompareHandsTab> {
           _isLoading = false;
         });
         return;
+      }
+
+      // Validate card format
+      final allCards = [...p1HoleCards, ...p2HoleCards, ...communityCards];
+      for (final card in allCards) {
+        if (card.length != 2) {
+          setState(() {
+            _error = 'Invalid card format: $card. Use format like HA, SK, D7, CT';
+            _isLoading = false;
+          });
+          return;
+        }
+        final suit = card[0];
+        final rank = card[1];
+        if (!['H', 'S', 'D', 'C'].contains(suit)) {
+          setState(() {
+            _error = 'Invalid suit in $card. Use H, S, D, or C';
+            _isLoading = false;
+          });
+          return;
+        }
+        if (!['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'].contains(rank)) {
+          setState(() {
+            _error = 'Invalid rank in $card. Use A, K, Q, J, T, 9-2';
+            _isLoading = false;
+          });
+          return;
+        }
       }
 
       final url = Uri.parse('${widget.apiUrl}/poker/compare-hands');
@@ -772,6 +833,33 @@ class _ProbabilityTabState extends State<ProbabilityTab> {
         return;
       }
 
+      // Validate hole card format
+      for (final card in holeCards) {
+        if (card.length != 2) {
+          setState(() {
+            _error = 'Invalid card format: $card. Use format like HA, SK, D7, CT';
+            _isLoading = false;
+          });
+          return;
+        }
+        final suit = card[0];
+        final rank = card[1];
+        if (!['H', 'S', 'D', 'C'].contains(suit)) {
+          setState(() {
+            _error = 'Invalid suit in $card. Use H, S, D, or C';
+            _isLoading = false;
+          });
+          return;
+        }
+        if (!['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'].contains(rank)) {
+          setState(() {
+            _error = 'Invalid rank in $card. Use A, K, Q, J, T, 9-2';
+            _isLoading = false;
+          });
+          return;
+        }
+      }
+
       final communityCards = <String>[];
       final controllers = [
         _communityCard1Controller,
@@ -786,6 +874,29 @@ class _ProbabilityTabState extends State<ProbabilityTab> {
         if (card.isEmpty) {
           setState(() {
             _error = 'Please fill in all community card fields';
+            _isLoading = false;
+          });
+          return;
+        }
+        if (card.length != 2) {
+          setState(() {
+            _error = 'Invalid card format: $card. Use format like HA, SK, D7, CT';
+            _isLoading = false;
+          });
+          return;
+        }
+        final suit = card[0];
+        final rank = card[1];
+        if (!['H', 'S', 'D', 'C'].contains(suit)) {
+          setState(() {
+            _error = 'Invalid suit in $card. Use H, S, D, or C';
+            _isLoading = false;
+          });
+          return;
+        }
+        if (!['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'].contains(rank)) {
+          setState(() {
+            _error = 'Invalid rank in $card. Use A, K, Q, J, T, 9-2';
             _isLoading = false;
           });
           return;

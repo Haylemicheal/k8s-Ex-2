@@ -204,7 +204,7 @@ func evaluateFiveCards(cards []Card) Hand {
 	if isFlush && isStraight && sortedCards[0].Rank == Ten && sortedCards[4].Rank == Ace {
 		return Hand{
 			Type:        RoyalFlush,
-			Value:       int32(RoyalFlush)*10000 + int32(sortedCards[4].Rank),
+			Value:       int32(RoyalFlush)*100000000 + int32(sortedCards[4].Rank)*1000000,
 			Description: "Royal Flush",
 			Cards:       sortedCards,
 		}
@@ -219,7 +219,7 @@ func evaluateFiveCards(cards []Card) Hand {
 		}
 		return Hand{
 			Type:        StraightFlush,
-			Value:       int32(StraightFlush)*10000 + int32(highCard),
+			Value:       int32(StraightFlush)*100000000 + int32(highCard)*1000000,
 			Description: "Straight Flush",
 			Cards:       sortedCards,
 		}
@@ -256,7 +256,7 @@ func evaluateFiveCards(cards []Card) Hand {
 		}
 		return Hand{
 			Type:        FourOfAKind,
-			Value:       int32(FourOfAKind)*10000 + int32(quads)*100 + int32(kicker),
+			Value:       int32(FourOfAKind)*100000000 + int32(quads)*10000 + int32(kicker),
 			Description: "Four of a Kind",
 			Cards:       sortedCards,
 		}
@@ -269,7 +269,7 @@ func evaluateFiveCards(cards []Card) Hand {
 		})
 		return Hand{
 			Type:        FullHouse,
-			Value:       int32(FullHouse)*10000 + int32(trips)*100 + int32(pairs[0]),
+			Value:       int32(FullHouse)*100000000 + int32(trips)*10000 + int32(pairs[0])*100,
 			Description: "Full House",
 			Cards:       sortedCards,
 		}
@@ -277,10 +277,13 @@ func evaluateFiveCards(cards []Card) Hand {
 
 	// Check for Flush
 	if isFlush {
-		value := int32(Flush) * 10000
-		for i := 4; i >= 0; i-- {
-			value = value*100 + int32(sortedCards[i].Rank)
-		}
+		// Value format: HandType(5)*100000000 + rank4*1000000 + rank3*10000 + rank2*100 + rank1*10 + rank0
+		value := int32(Flush)*100000000 + 
+			int32(sortedCards[4].Rank)*1000000 + 
+			int32(sortedCards[3].Rank)*10000 + 
+			int32(sortedCards[2].Rank)*100 + 
+			int32(sortedCards[1].Rank)*10 + 
+			int32(sortedCards[0].Rank)
 		return Hand{
 			Type:        Flush,
 			Value:       value,
@@ -298,7 +301,7 @@ func evaluateFiveCards(cards []Card) Hand {
 		}
 		return Hand{
 			Type:        Straight,
-			Value:       int32(Straight)*10000 + int32(highCard),
+			Value:       int32(Straight)*100000000 + int32(highCard)*1000000,
 			Description: "Straight",
 			Cards:       sortedCards,
 		}
@@ -317,7 +320,7 @@ func evaluateFiveCards(cards []Card) Hand {
 		})
 		return Hand{
 			Type:        ThreeOfAKind,
-			Value:       int32(ThreeOfAKind)*10000 + int32(trips)*100 + int32(kickers[0])*10 + int32(kickers[1]),
+			Value:       int32(ThreeOfAKind)*100000000 + int32(trips)*10000 + int32(kickers[0])*100 + int32(kickers[1]),
 			Description: "Three of a Kind",
 			Cards:       sortedCards,
 		}
@@ -337,7 +340,7 @@ func evaluateFiveCards(cards []Card) Hand {
 		}
 		return Hand{
 			Type:        TwoPair,
-			Value:       int32(TwoPair)*10000 + int32(pairs[0])*1000 + int32(pairs[1])*100 + int32(kicker),
+			Value:       int32(TwoPair)*100000000 + int32(pairs[0])*10000 + int32(pairs[1])*100 + int32(kicker),
 			Description: "Two Pair",
 			Cards:       sortedCards,
 		}
@@ -356,17 +359,20 @@ func evaluateFiveCards(cards []Card) Hand {
 		})
 		return Hand{
 			Type:        Pair,
-			Value:       int32(Pair)*10000 + int32(pairs[0])*1000 + int32(kickers[0])*100 + int32(kickers[1])*10 + int32(kickers[2]),
+			Value:       int32(Pair)*100000000 + int32(pairs[0])*10000 + int32(kickers[0])*100 + int32(kickers[1])*10 + int32(kickers[2]),
 			Description: "Pair",
 			Cards:       sortedCards,
 		}
 	}
 
 	// High Card
-	value := int32(HighCard) * 10000
-	for i := 4; i >= 0; i-- {
-		value = value*100 + int32(sortedCards[i].Rank)
-	}
+	// Value format: HandType(0)*100000000 + rank4*1000000 + rank3*10000 + rank2*100 + rank1*10 + rank0
+	value := int32(HighCard)*100000000 + 
+		int32(sortedCards[4].Rank)*1000000 + 
+		int32(sortedCards[3].Rank)*10000 + 
+		int32(sortedCards[2].Rank)*100 + 
+		int32(sortedCards[1].Rank)*10 + 
+		int32(sortedCards[0].Rank)
 	return Hand{
 		Type:        HighCard,
 		Value:       value,
